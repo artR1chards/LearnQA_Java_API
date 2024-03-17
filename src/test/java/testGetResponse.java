@@ -31,7 +31,7 @@ public class testGetResponse {
                 .get(location)
                 .jsonPath();
 // проверка на статусы
-        if (response.get("error") != null && response.get("error").equals("No job linked to this token")) {
+        if (response.get("error") != null && response.get("error").equals(errorStatus)) {
             System.out.println("status is correct " + errorStatus);
         }
         else{
