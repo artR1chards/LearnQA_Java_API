@@ -7,14 +7,29 @@ public class testGetResponse {
     @Test
     public void testGetResponseFromTestSite()
     {
+        String location = "https://playground.learnqa.ru/api/long_redirect";
         Response response = RestAssured
                 .given()
                 .redirects()
                 .follow(false)
-                .get("https://playground.learnqa.ru/api/long_redirect")
+                .get(location)
                 .andReturn();
 
-        String headerLocation = response.getHeader("Location");
-        System.out.println("Location is " + headerLocation);
+        int statusCode = response.getStatusCode();
+
+
+        while (statusCode != 200){
+           location = response.getHeader("Location");
+           System.out.println("Status code " + statusCode + "."+ " Location is " + location);
+           response = RestAssured
+                   .given()
+                   .redirects()
+                   .follow(false)
+                   .get(location)
+                   .andReturn();
+           statusCode = response.statusCode();
+        }
+
+        System.out.println("Status code " + statusCode);
     }
 }
