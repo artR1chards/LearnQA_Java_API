@@ -1,60 +1,82 @@
 import io.restassured.RestAssured;
-import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
 public class testGetResponse {
     @Test
-    public void testGetResponseFromTestSite()
+    public void checkValidCookies()
     {
+        String locationToGetCookie = "https://playground.learnqa.ru/ajax/api/get_secret_password_homework";
+        String checkCookie = "https://playground.learnqa.ru/ajax/api/check_auth_cookie";
+        String login = "super_admin";
+        boolean checkedCorrectPassword = false;
+        ArrayList<String> passwordsArray = new ArrayList<>(
+                Arrays.asList("123456",
+                        "123456789",
+                        "qwerty",
+                        "password",
+                        "1234567",
+                        "1234567",
+                        "12345",
+                        "iloveyou",
+                        "111111",
+                        "123123",
+                        "abc123",
+                        "qwerty123",
+                        "1q2w3e4r",
+                        "admin",
+                        "qwertyuiop",
+                        "654321",
+                        "555555",
+                        "lovely",
+                        "7777777",
+                        "welcome",
+                        "888888",
+                        "princess",
+                        "dragon",
+                        "password1",
+                        "123qwe"
+                        )
+        );
 
-        String location = "https://playground.learnqa.ru/ajax/api/longtime_job";
-        Map<String,String> tokenParam = new HashMap<>();
-        String jobIsNotReadyStatus = "Job is NOT ready";
-        String jobIsDoneStatus = "Job is ready" ;
-        String errorStatus = "No job linked to this token";
-        int waitTime = 0;
+        while (!checkedCorrectPassword){
+            for (String password : passwordsArray) {
+                Map<String, Object> body = new HashMap<>();
+                body.put("login", login);
+                body.put("password", password);
+                String responseCookie = "";
+                String responseCookieBody = "";
 
-//  создается задача
-        JsonPath response = RestAssured
-                .get(location)
-                .jsonPath();
-        tokenParam.put("token", response.get("token"));
-        waitTime = response.get("seconds");
-// делается один запрос с token ДО того, как задача готова, убеждаемся в правильности поля status
-        response = RestAssured
-                .given()
-                .queryParams(tokenParam)
-                .get(location)
-                .jsonPath();
-// проверка на статусы
-        if (response.get("error") != null && response.get("error").equals(errorStatus)) {
-            System.out.println("status is correct " + errorStatus);
-        }
-        else{
-            if (response.get("status").equals(jobIsNotReadyStatus)){
-                System.out.println("status is correct " + jobIsNotReadyStatus);
-                while (response.get("status").equals(jobIsNotReadyStatus)){
-                    try {
-                        Thread.sleep(waitTime * 1000);
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
-                    }
-                    response = RestAssured
-                            .given()
-                            .queryParams(tokenParam)
-                            .get(location)
-                            .jsonPath();
+                Response response = RestAssured
+                        .given()
+                        .body(body)
+                        .post(locationToGetCookie)
+                        .andReturn();
+                responseCookie = response.getCookie("auth_cookie");
+                Map<String, String> cookie = new HashMap<>();
+                cookie.put("auth_cookie", responseCookie);
+
+                Response checkCookies = RestAssured
+                        .given()
+                        .cookies(cookie)
+                        .get(checkCookie)
+                        .andReturn();
+                responseCookieBody = checkCookies.getBody().asString() ;
+
+                if (responseCookieBody.equals("You are authorized")) {
+                    checkedCorrectPassword = true;
+                    System.out.println("Correct password is " + password + "\n" + responseCookieBody);
+                    break;
                 }
-
             }
-            if (response.get("status").equals(jobIsDoneStatus) && response.get("result") != null){
-                System.out.println("status is correct " + jobIsDoneStatus);
-                System.out.println("result is check and has value " + response.get("result"));
-            }
+            break;
+        }
+        if (!checkedCorrectPassword){
+            System.out.println("There is not correct password");
         }
     }
 }
