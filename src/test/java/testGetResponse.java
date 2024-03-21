@@ -13,6 +13,8 @@ public class testGetResponse {
         String locationToGetCookie = "https://playground.learnqa.ru/ajax/api/get_secret_password_homework";
         String checkCookie = "https://playground.learnqa.ru/ajax/api/check_auth_cookie";
         String login = "super_admin";
+        String correctAuthText = "You are authorized";
+        String notFoundCorrectPassword = "There is not correct password";
         boolean checkedCorrectPassword = false;
         ArrayList<String> passwordsArray = new ArrayList<>(
                 Arrays.asList("123456",
@@ -65,18 +67,18 @@ public class testGetResponse {
                         .cookies(cookie)
                         .get(checkCookie)
                         .andReturn();
-                responseCookieBody = checkCookies.getBody().asString() ;
+                responseCookieBody = checkCookies.getBody().asString();
 
-                if (responseCookieBody.equals("You are authorized")) {
+                if (responseCookieBody.equals(correctAuthText)) {
                     checkedCorrectPassword = true;
                     System.out.println("Correct password is " + password + "\n" + responseCookieBody);
                     break;
                 }
             }
+            if (!checkedCorrectPassword){
+                System.out.println(notFoundCorrectPassword);
+            }
             break;
-        }
-        if (!checkedCorrectPassword){
-            System.out.println("There is not correct password");
         }
     }
 }
