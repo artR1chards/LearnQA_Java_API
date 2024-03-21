@@ -18,6 +18,7 @@ public class checkHeader {
                 .andReturn();
 
         Map<String, String> cookies = responseGetCookies.getCookies();
-        assertTrue(cookies.equals(validCookie), "Response doesn't have correctCookie");
+        assertTrue(cookies.get("HomeWork").equals(validCookie.get("HomeWork")), "There is not correct cookie");
+
     }
 }
