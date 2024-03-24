@@ -6,19 +6,17 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class checkHeader {
+    String header = "";
+    String url = "";
     @Test
-    public void checkCookieValue() {
-        Map<String, String> validCookie = new HashMap<>();
-        validCookie.put("HomeWork", "hw_value");
-
-
-        Response responseGetCookies = RestAssured
+    public void checkHeaderValue() {
+        String expectedHeaderValue = "Some secret value";
+        this.url = "https://playground.learnqa.ru/api/homework_header";
+        Response responseGetHeader = RestAssured
                 .given()
-                .get("https://playground.learnqa.ru/api/homework_cookie")
+                .get(this.url)
                 .andReturn();
-
-        Map<String, String> cookies = responseGetCookies.getCookies();
-        assertTrue(cookies.get("HomeWork").equals(validCookie.get("HomeWork")), "There is not correct cookie");
-
+        this.header = responseGetHeader.header("X-Secret-Homework-Header");
+        assertTrue(this.header.equals(expectedHeaderValue), "There is not correct header");
     }
 }
