@@ -53,5 +53,14 @@ public class ApiCoreRequests {
                 .andReturn();
     }
 
+    @Step("Get User Data")
+    public Response getUserData(String url, String csrfTokenHeader, String cookie, String userId){
+        return given()
+                .filter(new AllureRestAssured())
+                .header("x-csrf-token",csrfTokenHeader)
+                .cookie("auth_sid",cookie)
+                .get( url + userId)
+                .andReturn();
+    }
 
 }

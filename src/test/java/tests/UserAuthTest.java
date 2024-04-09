@@ -22,9 +22,6 @@ import org.junit.jupiter.api.DisplayName;
 
 @Epic("Authorisation cases")
 public class UserAuthTest extends BaseTestCase {
-    String cookie;
-    String header;
-    int userIdOnAuth;
     private final ApiCoreRequests apiCoreRequests = new ApiCoreRequests();
     @BeforeEach
     public void loginUser(){

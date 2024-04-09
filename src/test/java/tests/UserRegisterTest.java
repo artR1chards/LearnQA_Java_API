@@ -19,11 +19,12 @@ import java.util.Map;
 @Epic("Registration cases")
 public class UserRegisterTest extends BaseTestCase {
     private final ApiCoreRequests apiCoreRequests = new ApiCoreRequests();
+
     @Test
-    public void testCreateUserWithExistingEmail(){
+    public void testCreateUserWithExistingEmail() {
         String email = "vinkotov@example.com";
 
-        Map<String,String> userData = new HashMap<>();
+        Map<String, String> userData = new HashMap<>();
         userData.put("email", email);
         userData = DataGenerator.getRegistrationDate(userData);
 
@@ -33,14 +34,14 @@ public class UserRegisterTest extends BaseTestCase {
                 .post("https://playground.learnqa.ru/api/user")
                 .andReturn();
 
-        Assertions.assertResponseCodeEquals(responseCreateAuth, 400 );
+        Assertions.assertResponseCodeEquals(responseCreateAuth, 400);
         Assertions.assertResponseTextEquals(responseCreateAuth, "Users with email '" + email + "' already exists");
     }
 
     @Test
-    public void testCreateUserSuccessfully(){
+    public void testCreateUserSuccessfully() {
         String email = DataGenerator.getRandomEmail();
-        Map<String,String> userData = DataGenerator.getRegistrationDate();
+        Map<String, String> userData = DataGenerator.getRegistrationDate();
 
         Response responseCreateAuth = RestAssured
                 .given()
@@ -49,15 +50,15 @@ public class UserRegisterTest extends BaseTestCase {
                 .andReturn();
 
         Assertions.assertResponseCodeEquals(responseCreateAuth, 200);
-        Assertions.assertJsonHasField(responseCreateAuth,"id");
+        Assertions.assertJsonHasField(responseCreateAuth, "id");
     }
 
     @Test
     @Description("This test doesn't register user by email without dot")
     @DisplayName("Registration with email without dot")
-    public  void testCreateUserWithEmailWhitOutDot(){
+    public void testCreateUserWithEmailWhitOutDot() {
         String wrongEmail = "testwrong.com";
-        Map<String,String> userData = new HashMap<>();
+        Map<String, String> userData = new HashMap<>();
         userData.put("email", wrongEmail);
         userData = DataGenerator.getRegistrationDate(userData);
 
@@ -71,36 +72,36 @@ public class UserRegisterTest extends BaseTestCase {
     @ParameterizedTest
     @Description("This test checks registration without required field")
     @DisplayName("Test negative user registrations")
-    @ValueSource(strings = {"email","password","username","firstName","lastName"})
-    public void testNegativeRegistrations(String condition){
+    @ValueSource(strings = {"email", "password", "username", "firstName", "lastName"})
+    public void testNegativeRegistrations(String condition) {
         RequestSpecification spec = RestAssured.given();
         spec.baseUri("https://playground.learnqa.ru/api/user");
 
-        if(condition.equals("email")) {
+        if (condition.equals("email")) {
             Response responseForCheck = apiCoreRequests.makerPostRequestToRegistrationUser(
                     "https://playground.learnqa.ru/api/user",
                     DataGenerator.getInvalidRegistrationDate("email")
             );
             Assertions.assertResponseTextEquals(responseForCheck, "The following required params are missed: email");
-        }else if (condition.equals("password")){
+        } else if (condition.equals("password")) {
             Response responseForCheck = apiCoreRequests.makerPostRequestToRegistrationUser(
                     "https://playground.learnqa.ru/api/user",
                     DataGenerator.getInvalidRegistrationDate("password")
-                );
+            );
             Assertions.assertResponseTextEquals(responseForCheck, "The following required params are missed: password");
-        }else if (condition.equals("username")){
+        } else if (condition.equals("username")) {
             Response responseForCheck = apiCoreRequests.makerPostRequestToRegistrationUser(
                     "https://playground.learnqa.ru/api/user",
                     DataGenerator.getInvalidRegistrationDate("username")
             );
             Assertions.assertResponseTextEquals(responseForCheck, "The following required params are missed: username");
-        }else if (condition.equals("firstName")){
+        } else if (condition.equals("firstName")) {
             Response responseForCheck = apiCoreRequests.makerPostRequestToRegistrationUser(
                     "https://playground.learnqa.ru/api/user",
                     DataGenerator.getInvalidRegistrationDate("firstName")
             );
             Assertions.assertResponseTextEquals(responseForCheck, "The following required params are missed: firstName");
-        }else if (condition.equals("lastName")){
+        } else if (condition.equals("lastName")) {
             Response responseForCheck = apiCoreRequests.makerPostRequestToRegistrationUser(
                     "https://playground.learnqa.ru/api/user",
                     DataGenerator.getInvalidRegistrationDate("lastName")
@@ -111,12 +112,13 @@ public class UserRegisterTest extends BaseTestCase {
         }
 
     }
+
     @Test
     @Description("This test doesn't register user with one character name")
     @DisplayName("Registration with one character name")
-    public  void testCreateUserWithOneCharacterName(){
+    public void testCreateUserWithOneCharacterName() {
         String OneCharacterName = "t";
-        Map<String,String> userData = new HashMap<>();
+        Map<String, String> userData = new HashMap<>();
         userData.put("username", OneCharacterName);
         userData = DataGenerator.getRegistrationDate(userData);
 
@@ -128,9 +130,9 @@ public class UserRegisterTest extends BaseTestCase {
     @Test
     @Description("This test doesn't register user with more than 250 characters name")
     @DisplayName("Registration with more than 250 characters name")
-    public  void testCreateUserWithOneSymbolName(){
+    public void testCreateUserWithOneSymbolName() {
         String oneSymbolName = "artrichardsartrichardsartrichardsartrichardsartrichardsartrichardsartrichardsartrichardsartrichardsartrichardsartrichardsartrichardsartrichardsartrichardsartrichardsartrichardsartrichardsartrichardsartrichardsartrichardsartrichardsartrichardsardsartri";
-        Map<String,String> userData = new HashMap<>();
+        Map<String, String> userData = new HashMap<>();
         userData.put("username", oneSymbolName);
         userData = DataGenerator.getRegistrationDate(userData);
 
@@ -138,5 +140,4 @@ public class UserRegisterTest extends BaseTestCase {
                 .makerPostRequestToRegistrationUser("https://playground.learnqa.ru/api/user", userData);
         Assertions.assertResponseTextEquals(responseGetAuth, "The value of 'username' field is too long");
     }
-
 }

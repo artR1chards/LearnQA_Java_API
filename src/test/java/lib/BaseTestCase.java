@@ -10,6 +10,10 @@ import static org.hamcrest.Matchers.hasKey;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class BaseTestCase {
+
+    protected String cookie;
+    protected String header;
+    protected  int userIdOnAuth;
     protected String getHeader(Response Response, String name){
         Headers headers = Response.getHeaders();
         assertTrue(headers.hasHeaderWithName(name), "Response doesn't have header with name " + name);

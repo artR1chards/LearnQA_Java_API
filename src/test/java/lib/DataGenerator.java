@@ -10,11 +10,16 @@ public class DataGenerator {
         return  "learnqa" + timestamp + "@example.com";
     }
 
+    public static String getRandomName(){
+        String timestamp = new SimpleDateFormat("yyyyMMddHHmmss").format(new java.util.Date());
+        return  "learnqa" + timestamp;
+    }
+
     public static Map<String,String> getRegistrationDate(){
         Map<String,String> data = new HashMap<>();
         data.put("email", DataGenerator.getRandomEmail());
         data.put("password","123");
-        data.put("username","learnqa");
+        data.put("username","learnqa" + getRandomName());
         data.put("firstName","learnqa");
         data.put("lastName", "learnqa");
 
