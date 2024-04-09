@@ -130,10 +130,10 @@ public class UserRegisterTest extends BaseTestCase {
     @Test
     @Description("This test doesn't register user with more than 250 characters name")
     @DisplayName("Registration with more than 250 characters name")
-    public void testCreateUserWithOneSymbolName() {
-        String oneSymbolName = "artrichardsartrichardsartrichardsartrichardsartrichardsartrichardsartrichardsartrichardsartrichardsartrichardsartrichardsartrichardsartrichardsartrichardsartrichardsartrichardsartrichardsartrichardsartrichardsartrichardsartrichardsartrichardsardsartri";
+    public void testCreateUserWithLongName() {
+        String longName = "artrichardsartrichardsartrichardsartrichardsartrichardsartrichardsartrichardsartrichardsartrichardsartrichardsartrichardsartrichardsartrichardsartrichardsartrichardsartrichardsartrichardsartrichardsartrichardsartrichardsartrichardsartrichardsardsartri";
         Map<String, String> userData = new HashMap<>();
-        userData.put("username", oneSymbolName);
+        userData.put("username", longName);
         userData = DataGenerator.getRegistrationDate(userData);
 
         Response responseGetAuth = apiCoreRequests
