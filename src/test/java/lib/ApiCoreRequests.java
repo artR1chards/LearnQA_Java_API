@@ -102,5 +102,13 @@ public class ApiCoreRequests {
                 .andReturn();
     }
 
-
+    @Step("Make a Delete request with authorization data")
+    public  Response makeDeleteRequestUserWithAuthorizationData(String url, String csrfTokenHeader, String cookie, String userId){
+        return given()
+                .filter(new AllureRestAssured())
+                .header("x-csrf-token",csrfTokenHeader)
+                .cookie("auth_sid",cookie)
+                .delete( url + userId)
+                .andReturn();
+    }
 }

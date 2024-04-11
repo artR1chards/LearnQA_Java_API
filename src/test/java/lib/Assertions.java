@@ -53,5 +53,4 @@ public class Assertions {
             Assertions.assertJsonHasNotField(Response,expectedFieldName);
         }
     }
-
 }
