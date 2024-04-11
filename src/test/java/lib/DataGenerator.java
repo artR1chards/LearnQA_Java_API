@@ -22,7 +22,6 @@ public class DataGenerator {
         data.put("username","learnqa" + getRandomName());
         data.put("firstName","learnqa");
         data.put("lastName", "learnqa");
-
         return data;
     }
 

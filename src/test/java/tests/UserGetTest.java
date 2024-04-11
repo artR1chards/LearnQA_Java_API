@@ -1,6 +1,7 @@
 package tests;
 
 import io.qameta.allure.Description;
+import io.qameta.allure.Epic;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import lib.ApiCoreRequests;
@@ -14,7 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-
+@Epic("Get user data cases")
 public class UserGetTest extends BaseTestCase {
     private final ApiCoreRequests apiCoreRequests = new ApiCoreRequests();
     @Test
@@ -22,8 +23,6 @@ public class UserGetTest extends BaseTestCase {
         Response responseUserData = RestAssured
                 .get("https://playground.learnqa.ru/api/user/2")
                 .andReturn();
-
-        System.out.println(responseUserData.asString());
     }
 
     @Test
@@ -41,8 +40,6 @@ public class UserGetTest extends BaseTestCase {
         String header = this.getHeader(responseGetAuth, "x-csrf-token");
         String cookie = this.getCookie(responseGetAuth, "auth_sid");
 
-
-
         Response responseUserData = RestAssured
                 .given()
                 .header("x-csrf-token", header)
@@ -58,7 +55,6 @@ public class UserGetTest extends BaseTestCase {
     @Test
     @Description("This test show only user name for another user registration data")
     @DisplayName("This test show only user name")
-
     public void testGetDateAnotherUser(){
         //CREATE NEW USER
         String userId ;
@@ -72,7 +68,7 @@ public class UserGetTest extends BaseTestCase {
         newAuthDate.put("password", newUserData.get("password"));
 
         Response responseGetAuthNewUserData = apiCoreRequests
-                .makerPostRequestToRegistrationUser("https://playground.learnqa.ru/api/user", newUserData);
+                .makePostRequestToRegistrationUser("https://playground.learnqa.ru/api/user", newUserData);
 
         userId  = responseGetAuthNewUserData.jsonPath().getString("id");
 
@@ -87,8 +83,7 @@ public class UserGetTest extends BaseTestCase {
         this.cookie = this.getCookie(responseGetRegisteredUserData, "auth_sid");
         this.header = this.getHeader(responseGetRegisteredUserData, "x-csrf-token");
 
-        //TRT RO GET NEW AUTH USER DATA BY REGISTERED USER
-
+        //TRY TO GET NEW AUTH USER DATA BY REGISTERED USER
         Response getData = apiCoreRequests.
                 getUserData("https://playground.learnqa.ru/api/user/", this.header, this.cookie, userId);
 
@@ -96,6 +91,7 @@ public class UserGetTest extends BaseTestCase {
         String[] expectedFields = {"firstName", "lastName", "email"};
         Assertions.assertJsonHasNoTFields(getData, expectedFields);
     }
+
 }
 
 

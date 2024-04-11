@@ -2,7 +2,6 @@ package lib;
 
 import io.qameta.allure.Step;
 import io.qameta.allure.restassured.AllureRestAssured;
-import io.restassured.RestAssured;
 import io.restassured.http.Header;
 import io.restassured.response.Response;
 import java.util.Map;
@@ -46,7 +45,7 @@ public class ApiCoreRequests {
     }
 
     @Step("Make a POST-request to registration user")
-    public  Response makerPostRequestToRegistrationUser(String url, Map<String,String> userData){
+    public  Response makePostRequestToRegistrationUser(String url, Map<String,String> userData){
         return given()
                 .body(userData)
                 .post(url)
@@ -62,5 +61,46 @@ public class ApiCoreRequests {
                 .get( url + userId)
                 .andReturn();
     }
+
+    @Step("Make a Put-edition request with authorization data")
+    public  Response makePutRequestForEditionWithAuthorizationData (String url,String userId, String cookie, String csrfTokenHeader, Map<String,String> dataToEdition){
+        return given()
+                .filter(new AllureRestAssured())
+                .cookie("auth_sid",cookie)
+                .header("x-csrf-token",csrfTokenHeader)
+                .body(dataToEdition)
+                .put(url + userId)
+                .andReturn();
+    }
+
+    @Step("Make a Put-edition request with only cookie")
+    public  Response makePutRequestForEditionWithOnlyCookie(String url,String userId, String cookie, Map<String,String> dataToEdition){
+        return given()
+                .filter(new AllureRestAssured())
+                .cookie("auth_sid",cookie)
+                .body(dataToEdition)
+                .put(url + userId)
+                .andReturn();
+    }
+
+    @Step("Make a Put-edition request with only x-csrf-token")
+    public  Response makePutRequestForEditionWithOnlyCsrfToken(String url,String userId, String csrfTokenHeader, Map<String,String> dataToEdition){
+        return given()
+                .filter(new AllureRestAssured())
+                .header("x-csrf-token",csrfTokenHeader)
+                .body(dataToEdition)
+                .put(url + userId)
+                .andReturn();
+    }
+
+    @Step("Make a Put-edition request without authorization data")
+    public  Response makePutRequestForEditionWithoutAuthorizationData (String url,String userId, Map<String,String> dataToEdition){
+        return given()
+                .filter(new AllureRestAssured())
+                .body(dataToEdition)
+                .put(url + userId)
+                .andReturn();
+    }
+
 
 }

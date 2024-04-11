@@ -63,7 +63,7 @@ public class UserRegisterTest extends BaseTestCase {
         userData = DataGenerator.getRegistrationDate(userData);
 
         Response responseGetAuth = apiCoreRequests
-                .makerPostRequestToRegistrationUser("https://playground.learnqa.ru/api/user", userData);
+                .makePostRequestToRegistrationUser("https://playground.learnqa.ru/api/user", userData);
 
         Assertions.assertResponseTextEquals(responseGetAuth, "Invalid email format");
 
@@ -78,31 +78,31 @@ public class UserRegisterTest extends BaseTestCase {
         spec.baseUri("https://playground.learnqa.ru/api/user");
 
         if (condition.equals("email")) {
-            Response responseForCheck = apiCoreRequests.makerPostRequestToRegistrationUser(
+            Response responseForCheck = apiCoreRequests.makePostRequestToRegistrationUser(
                     "https://playground.learnqa.ru/api/user",
                     DataGenerator.getInvalidRegistrationDate("email")
             );
             Assertions.assertResponseTextEquals(responseForCheck, "The following required params are missed: email");
         } else if (condition.equals("password")) {
-            Response responseForCheck = apiCoreRequests.makerPostRequestToRegistrationUser(
+            Response responseForCheck = apiCoreRequests.makePostRequestToRegistrationUser(
                     "https://playground.learnqa.ru/api/user",
                     DataGenerator.getInvalidRegistrationDate("password")
             );
             Assertions.assertResponseTextEquals(responseForCheck, "The following required params are missed: password");
         } else if (condition.equals("username")) {
-            Response responseForCheck = apiCoreRequests.makerPostRequestToRegistrationUser(
+            Response responseForCheck = apiCoreRequests.makePostRequestToRegistrationUser(
                     "https://playground.learnqa.ru/api/user",
                     DataGenerator.getInvalidRegistrationDate("username")
             );
             Assertions.assertResponseTextEquals(responseForCheck, "The following required params are missed: username");
         } else if (condition.equals("firstName")) {
-            Response responseForCheck = apiCoreRequests.makerPostRequestToRegistrationUser(
+            Response responseForCheck = apiCoreRequests.makePostRequestToRegistrationUser(
                     "https://playground.learnqa.ru/api/user",
                     DataGenerator.getInvalidRegistrationDate("firstName")
             );
             Assertions.assertResponseTextEquals(responseForCheck, "The following required params are missed: firstName");
         } else if (condition.equals("lastName")) {
-            Response responseForCheck = apiCoreRequests.makerPostRequestToRegistrationUser(
+            Response responseForCheck = apiCoreRequests.makePostRequestToRegistrationUser(
                     "https://playground.learnqa.ru/api/user",
                     DataGenerator.getInvalidRegistrationDate("lastName")
             );
@@ -123,7 +123,7 @@ public class UserRegisterTest extends BaseTestCase {
         userData = DataGenerator.getRegistrationDate(userData);
 
         Response responseGetAuth = apiCoreRequests
-                .makerPostRequestToRegistrationUser("https://playground.learnqa.ru/api/user", userData);
+                .makePostRequestToRegistrationUser("https://playground.learnqa.ru/api/user", userData);
         Assertions.assertResponseTextEquals(responseGetAuth, "The value of 'username' field is too short");
     }
 
@@ -137,7 +137,7 @@ public class UserRegisterTest extends BaseTestCase {
         userData = DataGenerator.getRegistrationDate(userData);
 
         Response responseGetAuth = apiCoreRequests
-                .makerPostRequestToRegistrationUser("https://playground.learnqa.ru/api/user", userData);
+                .makePostRequestToRegistrationUser("https://playground.learnqa.ru/api/user", userData);
         Assertions.assertResponseTextEquals(responseGetAuth, "The value of 'username' field is too long");
     }
 }
