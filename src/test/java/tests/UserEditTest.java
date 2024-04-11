@@ -1,7 +1,6 @@
 package tests;
 
-import io.qameta.allure.Description;
-import io.qameta.allure.Epic;
+import io.qameta.allure.*;
 import io.restassured.RestAssured;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
@@ -16,6 +15,9 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import static io.qameta.allure.SeverityLevel.CRITICAL;
+
 @Epic("Edition cases")
 public class UserEditTest extends BaseTestCase {
     private final ApiCoreRequests apiCoreRequests = new ApiCoreRequests();
@@ -113,9 +115,13 @@ public class UserEditTest extends BaseTestCase {
     }
 
     @Test
+    @Severity(CRITICAL)
+    @Link(name = "TASK-123", url = "https://allurereport.org/docs/gettingstarted-readability")
     @Description("User trying to change another user data")
     @DisplayName("This test trying to change another user data")
+
     public void tryingToEditAnotherUserData() {
+        Allure.suite("Negative case for validation");
         //GENERATE USER THAT TRY TO CHANGE ANOTHER USER DATA
         Map<String, String> userThatTryToChangeAnotherUserDataRegistrationData = DataGenerator.getRegistrationDate();
         Response userThatTryToChangeAnotherUserDataRegistrationDataRegistrationResponse = apiCoreRequests
@@ -154,6 +160,7 @@ public class UserEditTest extends BaseTestCase {
     @Description("Trying to change email on Invalid email")
     @DisplayName("Invalid email")
     public void tryingToEditEmailOnInvalidEmail() {
+        Allure.suite("Negative case for validation");
         //GENERATE USER THAT TRY TO CHANGE EMAIL ON WRONG EMAIL
         Map<String, String> userThatTryToEditEmailOnInvalidEmailDate = DataGenerator.getRegistrationDate();
         Response userThatTryToEditEmailOnInvalidEmailDateResponse = apiCoreRequests
